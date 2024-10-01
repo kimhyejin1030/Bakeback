@@ -77,7 +77,7 @@
 		                <div class="form-group">
 		                    <label for="email">이메일 주소</label>
 		                    <div class="email-group">
-		                        <input type="text" id="email" name="memberEmail" placeholder="이메일 주소">
+		                        <input type="text" id="email" name="emailPrefix" placeholder="이메일 주소">
 		                        <span>@</span>
 		                        <input type="text" id="email-domain-display">
 		                        <select id="email-domain" onchange="updateEmailDomain()">
@@ -89,18 +89,33 @@
 		                        </select>
 		                    </div>
 		                </div>
+		                <div class="input-with-search-btn">
+		                	<div class="mail_check_input_box" id="mail_check_input_box_false">
+								<input class="mail_check" type="text" disabled="disabled">
+							</div>
+							<div class="mail_check_button">
+								<button type="button" class="mailcode-btn">인증번호 전송</button>
+							</div>							
+						</div>
+						
+						<div class="check_text">
+							<span id="mail_check_input_box_warn"></span>
+						</div>
+		                
+		                <!-- 숨겨진 input 필드 (이메일 전체 값을 담아서 전송할 예정) -->
+		                <input type="hidden" id="fullEmail" name="memberEmail">
 		                
 		                
 						<div class="form-group">
 						    <label for="address">주소</label>
 						    
 						    <div class="input-with-search-btn">
-						        <input type="text" id="zipcode" name="memberPost" placeholder="우편번호 입력">
-						        <button type="button" class="zipcode-btn">우편번호 검색</button>
+						        <input type="text" id="zipcode" name="memberPost" class="address_input_1" placeholder="우편번호 입력" readonly="readonly">
+						        <button type="button" class="zipcode-btn" onclick="execution_daum_address()">우편번호 검색</button>
 						    </div>
 						
-						    <input type="text" id="address" name="memberAddr1" placeholder="주소 입력" style="margin-top: 10px;">
-						    <input type="text" id="detailed-address" name="memberAddr2" placeholder="상세주소 입력" style="margin-top: 10px;">
+						    <input type="text" id="address" name="memberAddr1" class="address_input_2" placeholder="주소 입력" style="margin-top: 10px;" readonly="readonly">
+						    <input type="text" id="detailed-address" name="memberAddr2" class="address_input_3" placeholder="상세주소 입력" style="margin-top: 10px;" readonly="readonly">
 						</div>
 		
 		                <div class="form-actions">
@@ -115,13 +130,15 @@
     
 
     
-    
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
    <script>
         function updateEmailDomain() {
             var domainSelect = document.getElementById("email-domain");
             var domainDisplay = document.getElementById("email-domain-display");
             domainDisplay.value = domainSelect.value;
         }
+        
+        var code = "";		// 이메일 전송 인증번호 저장위한 코드
         
         $(document).ready(function(){
         	// 회원가입 버튼(회원가입 기능 작동)
@@ -157,6 +174,123 @@
 	
         });
         
+        /* 다음 주소 연동 */
+        function execution_daum_address(){
+        	
+        	new daum.Postcode({
+        		oncomplete: function(data){
+        			// 팝업에서 검색결과 항목을 클릭했을 때 실행할 코드를 작성하는 부분입니다.
+        			
+        			// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 주소변수 문자열과 참고항목 문자열 합치기
+                        addr += extraAddr;
+                    
+                    } else {
+                    	addr += '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    $(".address_input_1").val(data.zonecode);
+					$(".address_input_2").val(addr);
+                    // 커서를 상세주소 필드로 이동한다.
+					$(".address_input_3").attr("readonly",false);
+					$(".address_input_3").focus();
+        		}
+        	}).open();
+        }
+        
+	     /* 이메일 앞부분과 도메인 결함하여 값 전송 */
+	     // 도메인 선택 시 표시하는 함수
+	     function updateEmailDomain() {
+	     	// 선택된 도메인 가져오기
+	     	const emailDomain = document.getElementById("email-domain").value;
+	     	// 도메인 입력 필드에 값 설정
+	     	document.getElementById("email-domain-display").value = emailDomain;
+	     }
+	
+	     // 폼 제출 시 전체 이메일 주소를 결합하는 함수
+	     function submitForm() {
+	     	const emailPrefix = document.getElementById("email").value; // 이메일 앞부분
+	     	const emailDomain = document.getElementById("email-domain-display").value; // 선택된 도메인
+	     	
+	     	// 전체 이메일 주소 결합
+	     	const fullEmail = emailPrefix+ "@" + emailDomain;
+	     	
+	     	// 숨겨진 input에 전체 이메일 주소 설정
+	     	document.getElementById("fullEmail").value = fullEmail;
+	     }
+	
+	     // 폼 제출 시 submitForm 함수 호출
+	     document.querySelector('form').addEventListener('submit',function(e){
+	     	submitForm();
+	     });
+	     
+	     /* 인증번호 이메일 전송 */
+	     $(".mailcode-btn").click(function(){
+	    	 
+	    	submitForm();
+	    	 
+	    	var email = $("#fullEmail").val();	// 입력한 이메일
+	    	var checkBox = $(".mail_check");	// 인증번호 입력란	
+	    	var boxWrap = $(".mail_check_input_box");	// 인증번호 입력란 박스
+	    	 
+    		$.ajax({
+    			
+    			type:"GET",
+    			url:"mailCheck?email="+email,
+    			success:function(data){
+    				
+    				/* console.log("data : " + data); */
+    				checkBox.attr("disabled",false);
+    				boxWrap.attr("id", "mail_check_input_box_true");
+    				code = data;
+    				
+    			}
+    		});
+	    	 
+	     });
+	     
+	     /* 인증번호 비교 */
+	     $(".mail_check").blur(function(){
+	    	 
+	    	 var inputCode = $(".mail_check").val();	// 입력코드
+	    	 var checkResult = $("#mail_check_input_box_warn"); // 비교 결과
+	    	 
+	    	 if(inputCode == code){									// 일치할 경우
+	    		 checkResult.html("인증번호가 일치합니다");
+	    		 checkResult.attr("class","correct");
+	    	 }else {												// 불일치할 경우
+	    		 checkResult.html("인증번호를 다시 확인해주세요");
+	    		 checkResult.attr("class","incorrect");
+	    	 }
+	    	 
+	     });
         	
     </script>
 

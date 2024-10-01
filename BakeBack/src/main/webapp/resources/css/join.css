@@ -33,7 +33,7 @@
 
 .form-group {
     margin-bottom: 15px;
-}
+} 
 
 .form-group label {
     display: block;
@@ -128,7 +128,15 @@
     font-size: 14px;
 }
 
+.correct{
+	color : green;
+	font-size: 13px;
+}
 
+.incorrect{
+	color : red;
+	font-size: 13px;
+}
 
 .form-actions {
     display: flex;
@@ -159,9 +167,22 @@
     font-size: 14px;
     box-sizing: border-box;
     margin-right: 10px; /* Add space between input and button */
+    width: 270px;
 }
 
-.zipcode-btn {
+.mail_check, .mailcode-btn {
+	margin-top: 10px;
+}
+
+#mail_check_input_box_falsse{
+	background-color:#ebebe4;
+}
+
+#mail_check_input_box_true{
+	background-color:white;
+}
+
+.zipcode-btn, .mailcode-btn {
     padding: 10px 15px;
     background-color: #00a2ff;
     color: white;
