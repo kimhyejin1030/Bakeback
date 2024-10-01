@@ -50,7 +50,8 @@
 		                    <label for="user-id">아이디</label>
 		                    <div class="input-with-btn">
 		                        <input type="text" id="user-id" name="memberId" placeholder="아이디 입력 (6~20자)">
-		                        <button type="button" class="check-btn">중복 확인</button>
+		                        <button type="button" id="checkDuplicate" class="check-btn">중복 확인</button>
+		                        <span id="idCheckMessage" class="error-message"></span>
 		                    </div>
 		                </div>
 		                
@@ -128,7 +129,35 @@
         		$("#join_form").attr("action","/member/join");
         		$("#join_form").submit();
         	});
+        	
+        	// 중복 확인 버튼 클릭 이벤트 처리
+        	$('#checkDuplicate').click(function() {
+        		
+        		 console.log("중복 확인 버튼 클릭됨"); 
+        		
+        		var memberId = $('#user-id').val();
+        		
+                $.ajax({
+                    url: '/member/memberIdCk',
+                    method: 'POST',
+                    data: { memberId: memberId },		// '컨트롤에 넘길 데이터 이름' : '데이터(#user_id에 입력되는 값)'
+                    dataType: 'text',  // 또는 'json' 만약 서버에서 JSON을 반환하는 경우
+                    success: function(result) {
+                        if (result === 'success') {  // 여기서 response가 'success'로 오는지 확인
+                            $('#idCheckMessage').text('사용 가능한 아이디입니다.').css('color', 'green');
+                        } else {
+                            $('#idCheckMessage').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+                        }
+                    },
+                    error: function() {
+                        $('#idCheckMessage').text('서버 오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red');
+                    }
+                });
+        	});
+	
         });
+        
+        	
     </script>
 
 

@@ -28,6 +28,13 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.insert(namespace+".insertMember",member);
 		
 	}
+
+	// 아이디 중복 검사
+	@Override
+	public int idCheck(String memberId) throws Exception {
+		
+		return sqlSession.selectOne(namespace + ".idCheck",memberId);
+	}
 	
 	
 

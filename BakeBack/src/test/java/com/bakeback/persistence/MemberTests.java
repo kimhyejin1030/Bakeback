@@ -17,7 +17,7 @@ public class MemberTests {
 	
 	@Autowired
 	private MemberDAO memberdao;
-	
+	/*
 	@Test
 	public void insertMember() throws Exception{
 		MemberVO member = new MemberVO();
@@ -37,6 +37,15 @@ public class MemberTests {
         log.info("Member inserted: " + member);
 		
 		
+	}
+	*/
+	
+	@Test
+	public void memberIdCk() throws Exception{
+		String id="test1"; // 존재하는 아이디
+		String id2="test4"; // 존재하지 않는 아이디
+		memberdao.idCheck(id);
+		memberdao.idCheck(id2);
 	}
 
 }

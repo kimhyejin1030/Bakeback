@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bakeback.domain.MemberVO;
 import com.bakeback.service.MemberService;
@@ -26,7 +27,7 @@ public class MemberController {
 		
 		logger.info("회원가입 페이지 진입");
 				
-	} // joinGET() 
+	} // joinGET() 종료
 	
 	
 	/* 회원가입 처리 */
@@ -38,7 +39,27 @@ public class MemberController {
 		
 		return "redirect:/main";
 		
-	} // joinPOST()
+	} // joinPOST() 종료
+	
+	
+	/* 아이디 중복 검사 */
+	@RequestMapping(value="/memberIdCk", method = RequestMethod.POST)
+	@ResponseBody
+	public String memberIdCkPOST(String memberId) throws Exception {
+		
+		logger.info("memberIdCk()진입 : " + memberId);
+		
+		int result = memberService.idCheck(memberId);
+		
+		logger.info("결과값 = " + result);
+		
+		if(result != 0) {
+			return "fail"; // 중복 아이디 존재
+		}else {
+			return "success"; // 중복 아이디 X
+		}
+		
+	} // memberIdCkPOST() 종료
 	
 	/* 로그인 페이지 이동 */
 	@RequestMapping(value = "login", method = RequestMethod.GET)
@@ -46,6 +67,6 @@ public class MemberController {
 		
 		logger.info("로그인 페이지 진입");
 		
-	} // loginGET()
+	} // loginGET() 종료
 
 }

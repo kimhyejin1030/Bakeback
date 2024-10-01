@@ -19,6 +19,13 @@ public class MemberServiceImpl implements MemberService{
 		memberdao.insertMember(member);
 		
 	}
+
+	// 아이디 중복 검사
+	@Override
+	public int idCheck(String memberId) throws Exception {
+
+		return memberdao.idCheck(memberId);
+	}
 	
 	
 

@@ -13,6 +13,12 @@
                 #{memberAddr1}, #{memberAddr2}, #{phoneNumber}, #{adminCk})
   	</insert>
   	
+  	<!-- 아이디 중복 검사 -->
+  	<select id="idCheck" parameterType="String" resultType="int">
+  		SELECT COUNT(*)
+  		FROM bake_member
+  		WHERE memberId = #{memberId}
+  	</select>
   	
   	
   </mapper>
