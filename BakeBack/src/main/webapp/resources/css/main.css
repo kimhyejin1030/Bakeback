@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+/* 브라우저 기본 마진 제거 */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* GNB 고정 */
+.gnb {
+    position: fixed;
+    top: 0;
+    width: 100%; /* 페이지 너비에 맞춤 */
+    height: 85px;
+    background-color: #c1c7ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 다른 컨텐츠보다 위에 표시 */
+}
+
+/* GNB 내부에서 오른쪽 배치용으로 추가 */
+.gnb_inner {
+    position: relative;
+    width: 100%;
+}
+
+
+/* 컨텐츠 영역 */
+.content {
+    margin-top: 85px; /* GNB 영역 크기만큼 여백 */
+    background-color: #ecffc1;
+    min-height: 700px; /* 스크롤 가능하도록 높이 설정 */
+    padding: 50px; /* 컨텐츠 내부 여백 */
+}
+
+/* 로그인 영역 - 오른쪽 배치 */
+.login_area {
+    position: absolute;
+    right: 20px; /* 화면 오른쪽 끝에서 20px 간격 */
+    top: 50%;
+    transform: translateY(-50%); /* 수직 가운데 정렬 */
+    display: flex;
+    gap: 20px;
+}
+
+/* 로그인, 회원가입 글씨 크기 */
+.login_area div, .login_area span {
+    font-size: 1em;
+}

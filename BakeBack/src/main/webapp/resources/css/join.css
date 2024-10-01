@@ -1,0 +1,198 @@
+@charset "UTF-8";
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signup-box {
+    background-color: white;
+    padding: 70px 100px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.signup-box h1 {
+    font-size: 28px;
+/*     margin-bottom: 10px; */
+    text-align: center;
+}
+
+.signup-box p {
+/*     margin-bottom: 32px; */
+    color: #555;
+    text-align: center;
+}
+
+.signup-geul {
+	margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-with-btn {
+    position: relative;
+}
+
+.input-with-btn input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.input-with-btn .check-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-color: #00a2ff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    border-color: #40a9ff;
+}
+
+.error-message {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.email-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.email-group input[type="text"] {
+    width: 120px; /* Adjusted width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.email-group span {
+    margin: 0 10px; /* Increased margin between @ and the next input */
+}
+
+#email-domain-display {
+    width: 130px; /* Adjusted width */
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-right: 10px; /* Added space between the domain display and the select box */
+}
+
+.email-group select {
+    width: 110px; /* Adjusted width for select box */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-btn,
+.cancel-btn {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.input-with-search-btn {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px; /* 우편번호 칸과 아래 주소 칸 간격 추가 */
+}
+
+.input-with-search-btn input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-right: 10px; /* Add space between input and button */
+}
+
+.zipcode-btn {
+    padding: 10px 15px;
+    background-color: #00a2ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#address, #detailed-address {
+    margin-top: 10px; /* 각 입력란 간의 간격 추가 */
+}
+
+
+.submit-btn {
+    background-color: #00a2ff;
+    color: white;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    background-color: #ffc107;
+    color: white;
+    margin-top: 20px;
+}
