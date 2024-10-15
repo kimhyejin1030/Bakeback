@@ -205,7 +205,7 @@
     margin-top: 10px; /* 각 입력란 간의 간격 추가 */
 }
 
-
+/* 가입하기 버튼 */
 .submit-btn {
     background-color: #00a2ff;
     color: white;
@@ -217,3 +217,34 @@
     color: white;
     margin-top: 20px;
 }
+
+/* 유효성 검사 문구 */
+.final_id_ck{
+    display: none;
+}
+.final_pw_ck{
+    display: none;
+}
+.final_pwck_ck{
+    display: none;
+}
+.final_name_ck{
+    display: none;
+}
+.final_mail_ck{
+    display: none;
+}
+.final_addr_ck{
+    display: none;
+}
+
+/* 비밀번호 확인 일치 유효성 검사 */
+.pwck_input_re_1{
+	color: green;
+	display: none;
+}
+.pwck_input_re_2{
+	color: red;
+	display: none;
+}
+

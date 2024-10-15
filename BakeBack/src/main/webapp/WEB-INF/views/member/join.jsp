@@ -43,30 +43,36 @@
 		            <form>
 		                <div class="form-group">
 		                    <label for="name">이름</label>
-		                    <input type="text" id="name" name="memberName" placeholder="이름을 입력해 주세요">
+		                    <input type="text" class="user_input" id="name" name="memberName" placeholder="이름을 입력해 주세요">
+		                	<span class="final_name_ck">이름을 입력해주세요</span>
 		                </div>
 		                
 		                <div class="form-group">
 		                    <label for="user-id">아이디</label>
 		                    <div class="input-with-btn">
-		                        <input type="text" id="user-id" name="memberId" placeholder="아이디 입력 (6~20자)">
+		                        <input type="text" class="id_input" id="user-id" name="memberId" placeholder="아이디 입력 (6~20자)">
 		                        <button type="button" id="checkDuplicate" class="check-btn">중복 확인</button>
 		                        <span id="idCheckMessage" class="error-message"></span>
+		                        <span class="final_id_ck">아이디를 입력해주세요</span>
 		                    </div>
 		                </div>
 		                
 		                <div class="form-group">
 		                    <label for="password">비밀번호</label>
 		                    <div class="input-with-error">
-		                        <input type="password" id="password" name="memberPw" placeholder="문자, 숫자, 특수문자 포함 8~20자">
+		                        <input type="password" class="pw_input" id="password" name="memberPw" placeholder="문자, 숫자, 특수문자 포함 8~20자">
 		                    </div>
+		                    <span class="final_pw_ck">비밀번호를 입력해주세요</span>
 		                </div>
 		                
 		                <div class="form-group">
 		                    <label for="password-confirm">비밀번호 확인</label>
 		                    <div class="input-with-error">
-		                        <input type="password" id="password-confirm" placeholder="비밀번호 재입력">
+		                        <input type="password" class="pwck_input" id="password-confirm" placeholder="비밀번호 재입력">
 		                    </div>
+		                    <span class="final_pwck_ck">비밀번호 확인을 입력해주세요</span>
+		                    <span class="pwck_input_re_1">비밀번호가 일치합니다.</span>
+		                    <span class="pwck_input_re_2">비밀번호가 일치하지 않습니다.</span>
 		                </div>
 		                
 		                <div class="form-group">
@@ -77,7 +83,7 @@
 		                <div class="form-group">
 		                    <label for="email">이메일 주소</label>
 		                    <div class="email-group">
-		                        <input type="text" id="email" name="emailPrefix" placeholder="이메일 주소">
+		                        <input type="text" class="mail_input" id="email" name="emailPrefix" placeholder="이메일 주소">
 		                        <span>@</span>
 		                        <input type="text" id="email-domain-display">
 		                        <select id="email-domain" onchange="updateEmailDomain()">
@@ -88,6 +94,7 @@
 		                            <option value="hotmail.com">hotmail.com</option>
 		                        </select>
 		                    </div>
+		                    <span class="final_mail_ck">이메일을 입력해주세요</span>
 		                </div>
 		                <div class="input-with-search-btn">
 		                	<div class="mail_check_input_box" id="mail_check_input_box_false">
@@ -116,6 +123,7 @@
 						
 						    <input type="text" id="address" name="memberAddr1" class="address_input_2" placeholder="주소 입력" style="margin-top: 10px;" readonly="readonly">
 						    <input type="text" id="detailed-address" name="memberAddr2" class="address_input_3" placeholder="상세주소 입력" style="margin-top: 10px;" readonly="readonly">
+							<span class="final_addr_ck">주소를 입력해주세요</span>
 						</div>
 		
 		                <div class="form-actions">
@@ -140,11 +148,94 @@
         
         var code = "";		// 이메일 전송 인증번호 저장위한 코드
         
+        /* 유효성 검사 통과유무 변수 */
+        var nameCheck = false;			// 이름
+        var idCheck = false;			// 아이디
+        var idckCheck = false;			// 아이디 중복 검사
+        var pwCheck = false;			// 비번
+        var pwckCheck = false;			// 비번 확인
+        var pwckcorCheck = false;		// 비번 확인 일치 확인
+        var mailCheck = false;			// 이메일
+        var mailnumCheck = false;		// 이메일 인증번호 확인
+        var addressCheck = false;		// 주소
+        
         $(document).ready(function(){
         	// 회원가입 버튼(회원가입 기능 작동)
         	$(".submit-btn").click(function(){
-        		$("#join_form").attr("action","/member/join");
-        		$("#join_form").submit();
+        		
+        		/* 입력값 변수 */
+        		var id = $('.id_input').val();				// id 입력란
+        		var pw = $('.pw_input').val();				// 비밀번호 입력란
+        		var pwck = $('.pwck_input').val();			// 비밀번호 확인 입력란
+        		var name = $('.user_input').val();			// 이름 입력란
+        		var mail = $('.mail_input').val();			// 이메일 입력란
+        		var addr = $('.address_input_3').val();		// 주소 입력란
+        		// $("#join_form").attr("action","/member/join");
+        		// $("#join_form").submit();
+        		
+        		/* 이름 유효성 검사 */
+        		if(name == ""){
+        			$('.final_name_ck').css('display','block');
+        			nameCheck = false;
+        		}else{
+        			$('.final_name_ck').css('display','none');
+        			nameCheck = true;
+        		}
+        		
+        		/* 아이디 유효성 검사 */
+        		if(id == ""){
+        			$('.final_id_ck').css('display','block');
+        			idCheck = false;
+        		}else {
+        			$('.final_id_ck').css('display','none');
+        			idCheck = true;
+        		}
+        		
+        		/* 비밀번호 유효성 검사 */
+        		if(pw == ""){
+        			$('.final_pw_ck').css('display','block');
+        			pwCheck = false;
+        		}else {
+        			$('.final_pw_ck').css('display','block');
+        			pwCheck = true;
+        		}
+        		
+        		/* 비밀번호 확인 유효성 검사 */
+        		if(pwck == ""){
+        			$('.final_pwck_ck').css('display','block');
+        			pwckCheck = false;
+        		}else {
+        			$('.final_pwck_ck').css('display','block');
+        			pwckCheck = true;
+        		}
+        		
+        		/* 이메일 유효성 검사 */
+        		if(mail == ""){
+        			$('.final_mail_ck').css('display','block');
+        			mailCheck = false;
+        		}else{
+        			$('.final_mail_ck').css('display','none');
+        			mailCheck = true;
+        		}
+        		
+        		/* 주소 유효성 검사 */
+        		if(addr == ""){
+        			$('.final_addr_ck').css('display','block');
+        			addressCheck = false;
+        		}else{
+        			$('.final_adr_ck').css('display','none');
+        			addressCheck = true;
+        		}
+        		
+
+                /* 최종 유효성 검사 */
+                if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&pwckcorCheck&&nameCheck&&mailCheck&&mailnumCheck&&addressCheck){
+                    $("#join_form").attr("action", "/member/join");
+                    $("#join_form").submit();
+                }
+                
+                return false;
+        		
         	});
         	
         	// 중복 확인 버튼 클릭 이벤트 처리
@@ -162,8 +253,10 @@
                     success: function(result) {
                         if (result === 'success') {  // 여기서 response가 'success'로 오는지 확인
                             $('#idCheckMessage').text('사용 가능한 아이디입니다.').css('color', 'green');
+                        	idCheck = true;
                         } else {
                             $('#idCheckMessage').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+                            idCheck = false;
                         }
                     },
                     error: function() {
@@ -285,13 +378,34 @@
 	    	 if(inputCode == code){									// 일치할 경우
 	    		 checkResult.html("인증번호가 일치합니다");
 	    		 checkResult.attr("class","correct");
+	    		 mailnumCheck = true;
 	    	 }else {												// 불일치할 경우
 	    		 checkResult.html("인증번호를 다시 확인해주세요");
 	    		 checkResult.attr("class","incorrect");
+	    		 mailnumCheck = false;
 	    	 }
 	    	 
 	     });
+	     
+	    /* 비밀번호 학인 일치 유효성 검사 */
+        $('.pwck_input').on("properychange change keyup paste input",function(){
         	
+        	var pw = $('.pw_input').val();
+        	var pwck = $('.pwck_input').val();
+        	$('.final_pwck_ck').css('display','none');
+        	
+        	if(pw == pwck){
+        		$('.pwck_input_re_1').css('display','block');
+        		$('.pwck_input_re_2').css('display','none');
+        		pwckcorCheck = true;
+        	}else{
+        		$('.pwck_input_re_1').css('display','none');
+        		$('.pwck_input_re_2').css('display','block');
+        		pwckcorCheck = false;
+        	}
+        	
+        });
+	     
     </script>
 
 
