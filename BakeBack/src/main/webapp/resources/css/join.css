@@ -242,9 +242,13 @@
 .pwck_input_re_1{
 	color: green;
 	display: none;
+	font-size: 12px;
+	margin-top: 5px;
 }
 .pwck_input_re_2{
 	color: red;
 	display: none;
+	font-size: 12px;
+	margin-top: 5px;
 }
 

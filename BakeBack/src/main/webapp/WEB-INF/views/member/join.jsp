@@ -40,7 +40,6 @@
 			            <h1>회원가입</h1>
 			            <p>회원이 되어 다양한 혜택을 경험해 보세요!</p>
 			        </div>    
-		            <form>
 		                <div class="form-group">
 		                    <label for="name">이름</label>
 		                    <input type="text" class="user_input" id="name" name="memberName" placeholder="이름을 입력해 주세요">
@@ -130,7 +129,6 @@
 		                    <button type="submit" class="submit-btn">가입하기</button>
 		                    <button type="button" class="cancel-btn">가입취소</button>
 		                </div>
-		            </form>
 		        </div>
 	        </form>
 	    </div>
@@ -156,7 +154,7 @@
         var pwckCheck = false;			// 비번 확인
         var pwckcorCheck = false;		// 비번 확인 일치 확인
         var mailCheck = false;			// 이메일
-        var mailnumCheck = false;		// 이메일 인증번호 확인
+        var mailnumCheck = false; 		// 이메일 인증번호 확인
         var addressCheck = false;		// 주소
         
         $(document).ready(function(){
@@ -196,7 +194,7 @@
         			$('.final_pw_ck').css('display','block');
         			pwCheck = false;
         		}else {
-        			$('.final_pw_ck').css('display','block');
+        			$('.final_pw_ck').css('display','none');
         			pwCheck = true;
         		}
         		
@@ -205,7 +203,7 @@
         			$('.final_pwck_ck').css('display','block');
         			pwckCheck = false;
         		}else {
-        			$('.final_pwck_ck').css('display','block');
+        			$('.final_pwck_ck').css('display','none');
         			pwckCheck = true;
         		}
         		
@@ -223,49 +221,50 @@
         			$('.final_addr_ck').css('display','block');
         			addressCheck = false;
         		}else{
-        			$('.final_adr_ck').css('display','none');
+        			$('.final_addr_ck').css('display','none');
         			addressCheck = true;
         		}
         		
 
-                /* 최종 유효성 검사 */
-                if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&pwckcorCheck&&nameCheck&&mailCheck&&mailnumCheck&&addressCheck){
-                    $("#join_form").attr("action", "/member/join");
-                    $("#join_form").submit();
-                }
+        		/* 최종 유효성 검사 */
+        		if (nameCheck && idCheck && pwCheck && pwckCheck && mailCheck && addressCheck) {
+        		    $("#join_form").attr("action", "/member/join");
+        		    $("#join_form").submit();
+        		}
                 
                 return false;
         		
         	});
-        	
-        	// 중복 확인 버튼 클릭 이벤트 처리
-        	$('#checkDuplicate').click(function() {
-        		
-        		 console.log("중복 확인 버튼 클릭됨"); 
-        		
-        		var memberId = $('#user-id').val();
-        		
-                $.ajax({
-                    url: '/member/memberIdCk',
-                    method: 'POST',
-                    data: { memberId: memberId },		// '컨트롤에 넘길 데이터 이름' : '데이터(#user_id에 입력되는 값)'
-                    dataType: 'text',  // 또는 'json' 만약 서버에서 JSON을 반환하는 경우
-                    success: function(result) {
-                        if (result === 'success') {  // 여기서 response가 'success'로 오는지 확인
-                            $('#idCheckMessage').text('사용 가능한 아이디입니다.').css('color', 'green');
-                        	idCheck = true;
-                        } else {
-                            $('#idCheckMessage').text('이미 사용 중인 아이디입니다.').css('color', 'red');
-                            idCheck = false;
-                        }
-                    },
-                    error: function() {
-                        $('#idCheckMessage').text('서버 오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red');
-                    }
-                });
-        	});
-	
         });
+        	
+       	// 중복 확인 버튼 클릭 이벤트 처리
+       	$('#checkDuplicate').click(function() {
+       		
+       		 console.log("중복 확인 버튼 클릭됨"); 
+       		
+       		var memberId = $('#user-id').val();
+       		
+               $.ajax({
+                   url: '/member/memberIdCk',
+                   method: 'POST',
+                   data: { memberId: memberId },		// '컨트롤에 넘길 데이터 이름' : '데이터(#user_id에 입력되는 값)'
+                   dataType: 'text',  // 또는 'json' 만약 서버에서 JSON을 반환하는 경우
+                   success: function(result) {
+                       if (result === 'success') {  // 여기서 response가 'success'로 오는지 확인
+                           $('#idCheckMessage').text('사용 가능한 아이디입니다.').css('color', 'green');
+                       	idCheck = true;
+                       } else {
+                           $('#idCheckMessage').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+                           idCheck = false;
+                       }
+                   },
+                   error: function() {
+                       $('#idCheckMessage').text('서버 오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red');
+                   }
+               });
+       	});
+	
+        
         
         /* 다음 주소 연동 */
         function execution_daum_address(){
@@ -387,24 +386,28 @@
 	    	 
 	     });
 	     
-	    /* 비밀번호 학인 일치 유효성 검사 */
-        $('.pwck_input').on("properychange change keyup paste input",function(){
-        	
-        	var pw = $('.pw_input').val();
-        	var pwck = $('.pwck_input').val();
-        	$('.final_pwck_ck').css('display','none');
-        	
-        	if(pw == pwck){
-        		$('.pwck_input_re_1').css('display','block');
-        		$('.pwck_input_re_2').css('display','none');
-        		pwckcorCheck = true;
-        	}else{
-        		$('.pwck_input_re_1').css('display','none');
-        		$('.pwck_input_re_2').css('display','block');
-        		pwckcorCheck = false;
-        	}
-        	
-        });
+	     /* 비밀번호 확인 일치 유효성 검사 */
+	     $('.pwck_input').on("propertychange change keyup paste input", function(){
+	    		
+	    		var pw = $('.pw_input').val();
+	    		var pwck = $('.pwck_input').val();
+	    		$('.final_pwck_ck').css('display', 'none');
+	    		
+	    		if(pw == pwck){
+	    			$('.pwck_input_re_1').css('display','block');
+	    			$('.pwck_input_re_2').css('display','none');
+	    			pwckcorCheck = true;
+	    		}else{
+	    			$('.pwck_input_re_1').css('display','none');
+	    			$('.pwck_input_re_2').css('display','block');
+	    			pwckcorCheck = false;
+	    		}
+	    		
+	    		
+	    	});
+
+
+
 	     
     </script>
 
