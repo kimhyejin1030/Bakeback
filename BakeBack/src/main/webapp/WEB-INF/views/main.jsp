@@ -13,7 +13,7 @@
 	<div class="gnb">
 		<div class="gnb_inner">
 			<div class="login_area">
-        		<div><a href="/board/login">로그인</a></div>
+        		<div><a href="/member/login">로그인</a></div>
         		<div><a href="/member/join">회원가입</a></div>
         	</div>
         	<!-- 로고 & 다른 컨텐츠 추가 -->
